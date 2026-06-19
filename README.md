@@ -1,4 +1,4 @@
-<h1> 📄 MotorPH Payroll System - Milestone 2 Update</h1>
+<h1> 📄 MotorPH Payroll System - Last OOP Update</h1>
 
 <hr>
 
