@@ -1,59 +1,31 @@
-<h1> 📄 MotorPH Payroll System - Last OOP Update</h1>
+# MotorPH Payroll System - Database Migration
 
-<hr>
+## Overview
+This milestone marks the successful migration of the MotorPH Payroll System from a legacy CSV-based flat-file storage system to a robust, relational database architecture using MySQL and JDBC. This transition ensures data integrity, enhances security through RBAC, and lays the foundation for enterprise-level payroll processing.
 
-<h3>🚀 Key System Enhancements</h3>
+## Key Changes
+- **Database Schema**: Transitioned from raw CSV data to a normalized MySQL schema (Tables: `Employee`, `Role`, `UserAccount`, `UserRole`, `EmployeeDetails`).
+- **Persistence Layer**: Implemented the DAO (Data Access Object) pattern. All data operations are now handled via `DatabaseConnection` and JDBC, replacing `FileHandler` logic.
+- **Authentication**: Refactored the login system to authenticate against a database-backed `UserAccount` table, supporting Role-Based Access Control (RBAC).
+- **Driver Integration**: Configured MySQL Connector/J in the project classpath for reliable database communication.
+- **Model Upgrades**: Enhanced `Employee` model and `RegularEmployee` subclass to support comprehensive payroll fields including SSS, PhilHealth, TIN, and Pag-IBIG.
 
-<p>The following updates focus on <strong>Data Integrity</strong> and <strong>Defensive Programming</strong> to ensure the system handles financial data accurately and securely.</p>
+## Technical Stack
+- **Database**: MySQL 8.0
+- **Connectivity**: Java Database Connectivity (JDBC)
+- **IDE**: Apache NetBeans
+- **Driver**: MySQL Connector/J
 
-<ul>
-<li>
-<strong>Strict Numeric Filtering:</strong>
-Implemented a <code>DocumentFilter</code> that blocks alphabetic characters in real-time for Salary and Government ID fields.
-</li>
-<li>
-<strong>7-Digit Employee ID Cap:</strong>
-The system now strictly enforces a 7-character limit for Employee Numbers to maintain database consistency.
-</li>
-<li>
-<strong>Automated Currency Formatting:</strong>
-Using a <code>FocusListener</code>, the system automatically formats raw numbers into currency strings (e.g., <code>25,500.00</code>) once the user finishes typing.
-</li>
-<li>
-<strong>CSV Data Sanitization:</strong>
-The application "cleans" user input by stripping commas before saving to the CSV, ensuring compatibility with the <code>SalaryComputationPipeline</code>.
-</li>
-</ul>
+## Accomplishments
+- [x] Established `motorph_payroll` database schema.
+- [x] Implemented JDBC connection utility for centralized configuration.
+- [x] Migrated authentication service to query live database records.
+- [x] Updated GUI-to-DAO communication to populate dashboards using real-time SQL queries.
 
-<hr>
+## Next Steps
+- Implement full CRUD (Create, Read, Update, Delete) operations in `EmployeeDAO`.
+- Migrate attendance and salary history data from legacy files.
+- Optimize payroll computation logic using the new database-backed models.
 
-<h3>🛠️ Feature Implementation Details</h3>
-
-<table border="1">
-<thead>
-<tr>
-<th>Field Category</th>
-<th>Constraint / Logic</th>
-<th>Validation Tool</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Employee #</strong></td>
-<td>Max 7 Digits, Numbers Only</td>
-<td><code>NumericDocumentFilter(7)</code></td>
-</tr>
-<tr>
-<td><strong>Basic Salary</strong></td>
-<td>Numbers + One Decimal + Auto-Commas</td>
-<td><code>MoneyDocumentFilter</code> & <code>FocusListener</code></td>
-</tr>
-<tr>
-<td><strong>Government IDs</strong></td>
-<td>Fixed Patterns (e.g., 00-0000000-0)</td>
-<td><code>MaskFormatter</code></td>
-</tr>
-</tbody>
-</table>
-
-<hr>
+---
+*Developed by: Group 9 (A2101)*
