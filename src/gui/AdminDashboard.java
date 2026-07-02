@@ -9,16 +9,10 @@ import service.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
-import java.net.URL;
-import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import model.Ticket;
+import java.net.URL; 
 
-/**
- * AdminDashboard — Full-access dashboard for HR Admin.
- * Refactored to be 100% database-driven.
- */
 public class AdminDashboard extends JFrame {
 
     private final CardLayout cardLayout = new CardLayout();
@@ -51,6 +45,7 @@ public class AdminDashboard extends JFrame {
             }
         };
 
+        // Initialize and setup panels
         employeePanel.setOpaque(false);
         leavePanel.setOpaque(false);
         attendancePanel.setOpaque(false);
@@ -59,6 +54,9 @@ public class AdminDashboard extends JFrame {
         contentPanel.add(leavePanel, "Leave");
         contentPanel.add(attendancePanel, "Attendance");
         contentPanel.add(ticketsPanel, "Tickets");
+
+        // Now trigger the load
+        employeePanel.refreshTable();
 
         JPanel sidebar = buildSidebar();
 

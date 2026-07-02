@@ -2,10 +2,11 @@ package gui;
 
 import service.EmployeeService;
 import dao.EmployeeDAO;
+import model.Employee; // Ensure this import is here
+import java.util.List;  // Ensure this import is here
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.List;
 
 public class EmployeePanel extends JPanel {
 
@@ -16,13 +17,11 @@ public class EmployeePanel extends JPanel {
     private final EmployeeTable dashboardTable;
 
     public EmployeePanel() {
-        // Initialize service and DAO
         this.employeeService = new EmployeeService(new EmployeeDAO());
         
         setLayout(new BorderLayout());
         setOpaque(false);
 
-        // Initialize table
         dashboardTable = new EmployeeTable(employeeService);
 
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -69,16 +68,33 @@ public class EmployeePanel extends JPanel {
             updateButton.setEnabled(isSelected);
             deleteButton.setEnabled(isSelected);
         });
+        
+        // Load data on start
+        refreshTable();
     }
+
+    // This method now correctly delegates to the dashboardTable component
+    // Inside EmployeePanel.java
+// Inside EmployeePanel.java
+
+public void refreshTable() {
+    List<String[]> data = employeeService.getAllEmployees();
+    System.out.println("DEBUG: Service returned " + (data != null ? data.size() : "null") + " records.");
+    
+    if (data != null && !data.isEmpty()) {
+        dashboardTable.refreshTable(data);
+    } else {
+        System.out.println("DEBUG: Table refresh skipped because data was empty or null.");
+    }
+}
 
     private void showAddEmployeeDialog() {
         JFrame frame = new JFrame("Add Employee");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(550, 600);
         frame.setLocationRelativeTo(null);
-        // Pass the service instead of fileHandler
         frame.add(new AddEmployeePanel(employeeService, () -> {
-            dashboardTable.refreshTable(employeeService.getAllEmployees());
+            refreshTable();
             frame.dispose();
         }));
         frame.setVisible(true);
@@ -97,6 +113,8 @@ public class EmployeePanel extends JPanel {
         }
     }
 
+    // ... (Keep styleMinimalButton, styleColoredButton, and paintComponent methods exactly as they were)
+    
     private void styleMinimalButton(JButton button, int width, int height) {
         button.setFocusPainted(false);
         button.setContentAreaFilled(false);
@@ -138,6 +156,5 @@ public class EmployeePanel extends JPanel {
     }
 
     public EmployeeTable getDashboardTable() { return this.dashboardTable; }
-    
     @Override protected void paintComponent(Graphics g) { super.paintComponent(g); }
 }

@@ -61,7 +61,11 @@ public class ViewEmployeePanel extends JPanel {
                 leftPanel.add(label, gbc);
 
                 gbc.gridx = 1;
-                JTextArea dataField = new JTextArea(employeeData.get(dataIndex++).toString());
+                // Safety check: only get data if it exists in the vector
+                String val = (employeeData != null && dataIndex < employeeData.size()) 
+                             ? employeeData.get(dataIndex++).toString() : "N/A";
+                             
+                JTextArea dataField = new JTextArea(val);
                 dataField.setEditable(false);
                 dataField.setOpaque(false);
                 dataField.setFont(UI_FONT);

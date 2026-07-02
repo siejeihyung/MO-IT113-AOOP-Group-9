@@ -1,6 +1,7 @@
 package gui;
 
 import service.EmployeeService;
+import model.Employee; // <--- ADD THIS IMPORT
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -44,21 +45,23 @@ public class EmployeeTable extends JPanel {
         scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
 
         add(scrollPane, BorderLayout.CENTER);
-
-        // Fetch data from Database via Service
-        refreshTable(employeeService.getAllEmployees());
     }
 
-    public void refreshTable(List<String[]> data) {
-        model.setRowCount(0);
-        for (String[] row : data) {
-            // Mapping: row[0]=ID, row[1]=Last, row[2]=First, row[6]=SSS, row[7]=Phil, row[8]=TIN, row[9]=Pag
-            if (row.length >= 10) {
-                model.addRow(new Object[]{row[0], row[1], row[2], row[6], row[7], row[8], row[9]});
-            }
+    // Updated method to match the Employee model
+    // Inside EmployeeTable.java
+
+// Change the parameter from List<Employee> back to List<String[]>
+// Inside EmployeeTable.java
+public void refreshTable(List<String[]> data) {
+    model.setRowCount(0);
+    for (String[] row : data) {
+        if (row.length >= 7) { // Now this check will pass!
+            model.addRow(new Object[]{
+                row[0], row[1], row[2], row[3], row[4], row[5], row[6]
+            });
         }
     }
-
+}
     public JTable getTable() { return table; }
 
     public Vector<Object> getSelectedEmployeeFullDetails() {

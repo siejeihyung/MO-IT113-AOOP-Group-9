@@ -16,38 +16,39 @@ import java.util.List;
 public class EmployeeDAO {
     
     public boolean exists(String username) {
-    // Your SQL logic to check if user exists
-    return false; // Replace with actual query
-}
+        return false; 
+    }
 
-public boolean save(String username, String password) {
-    // Your SQL logic to insert user
-    return false; // Replace with actual query
-}
+    public boolean save(String username, String password) {
+        return false; 
+    }
 
-public boolean updatePassword(String username, String password) {
-    // Your SQL logic to update password
-    return false; // Replace with actual query
-}
+    public boolean updatePassword(String username, String password) {
+        return false; 
+    }
     
     public List<Employee> findAll() {
         List<Employee> employees = new ArrayList<>();
         
-        String query = "SELECT EmployeeID, LastName, FirstName, SSS, Philhealth, TIN, " +
+        String query = "SELECT EmployeeID, LastName, FirstName, SSS, PhilHealth, TIN, " +
                        "PagIbig, BasicSalary, SemiMonthlyRate, HourlyRate, TotalBenefits " +
                        "FROM employee";
+
+        System.out.println("Executing query: " + query); 
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query);
              ResultSet rs = pstmt.executeQuery()) {
 
+            int count = 0;
             while (rs.next()) {
+                count++;
                 Employee emp = new RegularEmployee(
                     rs.getString("EmployeeID"),
                     rs.getString("LastName"),
                     rs.getString("FirstName"),
                     rs.getString("SSS"),
-                    rs.getString("Philhealth"),
+                    rs.getString("PhilHealth"),
                     rs.getString("TIN"),
                     rs.getString("PagIbig"),
                     rs.getDouble("BasicSalary"),
@@ -57,6 +58,8 @@ public boolean updatePassword(String username, String password) {
                 );
                 employees.add(emp);
             }
+            System.out.println("EmployeeDAO: Found " + count + " employees in database.");
+            
         } catch (SQLException e) {
             System.err.println("EmployeeDAO: Error fetching employee objects - " + e.getMessage());
             e.printStackTrace();
@@ -76,7 +79,7 @@ public boolean updatePassword(String username, String password) {
                     rs.getString("LastName"),
                     rs.getString("FirstName"),
                     rs.getString("SSS"),
-                    rs.getString("Philhealth"),
+                    rs.getString("PhilHealth"),
                     rs.getString("TIN"),
                     rs.getString("PagIbig"),
                     rs.getDouble("BasicSalary"),
@@ -91,33 +94,41 @@ public boolean updatePassword(String username, String password) {
         return null;
     }
 
-   public String[] findRawById(String id) {
-    Employee emp = findById(id);
-    if (emp != null) {
-        return new String[]{
+    public String[] findRawById(String id) {
+        Employee emp = findById(id);
+        if (emp != null) {
+            return new String[]{
+                emp.getEmployeeID(), 
+                emp.getLastName(), 
+                emp.getFirstName(), 
+                emp.getSSS(),          
+                emp.getPhilHealth(),   
+                emp.getTIN(),          
+                emp.getPagIbig(),      
+                String.valueOf(emp.getBasicSalary()), 
+                String.valueOf(emp.getSemiMonthlyRate()), 
+                String.valueOf(emp.getHourlyRate()), 
+                String.valueOf(emp.getTotalBenefits())
+            };
+        }
+        return null;
+    }
+
+    public List<String[]> findAllRaw() {
+    List<String[]> list = new ArrayList<>();
+    for (Employee emp : findAll()) {
+        list.add(new String[]{
             emp.getEmployeeID(), 
             emp.getLastName(), 
             emp.getFirstName(), 
-            emp.getSSS(),          
-            emp.getPhilHealth(),   
-            emp.getTIN(),         
-            emp.getPagIbig(),      
-            String.valueOf(emp.getBasicSalary()), 
-            String.valueOf(emp.getSemiMonthlyRate()), 
-            String.valueOf(emp.getHourlyRate()), 
-            String.valueOf(emp.getTotalBenefits())
-        };
+            emp.getSSS(),        
+            emp.getPhilHealth(), 
+            emp.getTIN(),        
+            emp.getPagIbig()     
+        });
     }
-    return null;
+    return list;
 }
-
-    public List<String[]> findAllRaw() {
-        List<String[]> list = new ArrayList<>();
-        for (Employee emp : findAll()) {
-            list.add(new String[]{emp.getEmployeeID(), emp.getLastName(), emp.getFirstName()});
-        }
-        return list;
-    }
     
     public boolean append(String[] row) { System.out.println("Append not implemented"); return false; }
     public boolean updateField(String id, String col, String val) { System.out.println("Update not implemented"); return false; }
