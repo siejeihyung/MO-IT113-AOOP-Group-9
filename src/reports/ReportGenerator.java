@@ -5,8 +5,14 @@
 
 package reports;
 
-import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.*;
 import javax.swing.JOptionPane;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -14,6 +20,18 @@ import java.util.List;
 import java.util.Map;
 
 public class ReportGenerator {
+    
+    public static void generateReport(String jrxmlPath, List<?> dataList, Map<String, Object> parameters) {
+        try {
+            InputStream reportStream = ReportGenerator.class.getResourceAsStream(jrxmlPath);
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(dataList);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (JRException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void generatePayslip(List<PayslipModel> dataList) {
         // Validation Rule: Guard against empty lists triggering silent Jasper engine blocks
@@ -28,10 +46,10 @@ public class ReportGenerator {
 
         try {
             System.out.println("Attempting to locate JRXML template...");
-            InputStream reportStream = ReportGenerator.class.getResourceAsStream("src/reports/motorph_employee_payslip.jrxml");
+            InputStream reportStream = ReportGenerator.class.getResourceAsStream("/reports/motorph_employee_payslip.jrxml");
 
             if (reportStream == null) {
-                throw new JRException("The system cannot find the report file layout (src/reports/motorph_employee_payslip.jrxml). Please verify your folder path placement.");
+                throw new JRException("The system cannot find the report file layout (/reports/motorph_employee_payslip.jrxml). Please verify your folder path placement.");
             }
 
             System.out.println("Compiling Jasper template...");

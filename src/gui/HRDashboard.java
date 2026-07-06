@@ -23,7 +23,7 @@ public class HRDashboard extends JFrame {
 
     private JTable table;
     private DefaultTableModel tableModel;
-    private JButton employeeBtn, logoutBtn;
+    private JButton employeeBtn, logoutBtn, printtimecard;
 
     private static final String[] HEADERS = {
         "Employee #", "Last Name", "First Name", "Birthday", "Address",
@@ -69,6 +69,7 @@ public class HRDashboard extends JFrame {
 
         employeeBtn = makeNavBtn("Employees", "employee.png");
         logoutBtn = makeNavBtn("Log-out", "logout.png");
+        JButton printtimecardBtn = makeNavBtn("Print Time Card", "Payslip Button.png");
         logoutBtn.setForeground(Color.GRAY);
 
         navPanel.add(new JLabel("General") {{ setFont(new Font("Segoe UI", Font.BOLD, 15)); }});

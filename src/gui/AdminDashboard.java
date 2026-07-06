@@ -67,9 +67,27 @@ public class AdminDashboard extends JFrame {
         printPayslipBtn.addActionListener( e -> {
         java.util.List<reports.PayslipModel> testList = new java.util.ArrayList<>();
         testList.add(new reports.PayslipModel("PS-001", "Test Employee", 0.0));
-        reports.ReportGenerator.generatePayslip(testList);
+        
+        if (testList == null || testList.isEmpty ()) {
+            System.out.println("Warning: tesList is Empty!");
+        } else {
+            reports.ReportGenerator.generatePayslip(testList);
+        }
     });
         
+      //  printTimeCardBtn.addActionListener(e -> {
+        // 1. Fetch data from your AttendanceDAO/Service
+       //  List<TimeCardModel> timeCardList = attendanceService.getTimeCardData(selectedEmployeeId);
+
+        // 2. Set Parameters (as defined in the TimeCard JRXML)
+       //  Map<String, Object> params = new HashMap<>();
+       //  params.put("employeeId", selectedEmployeeId);
+       //  params.put("employeeName", "John Doe"); // Fetch this from EmployeeDAO
+       //  params.put("periodEndDate", "07/15/2026");
+
+        // 3. Execute
+      //   ReportGenerator.generateReport("/reports/motorph_employee_timecard.jrxml", timeCardList, params);
+    // }):        
         ticketsBtn.addActionListener(e -> {
             refreshTicketTable();
             cardLayout.show(contentPanel, "Tickets");

@@ -35,9 +35,6 @@ public class PayslipModel {
         this.takeHomePay = takeHomePay;
         // Assign other fields here...
     }
-
-    // IMPORTANT: JasperReports uses these getter methods to find the data.
-    // Ensure the method names match your field names (e.g., getPayslipNo matches field 'payslipNo').
     
     public String getPayslipNo() { return payslipNo; }
     public String getPeriodStartDate() { return periodStartDate; }
