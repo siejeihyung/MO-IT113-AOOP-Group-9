@@ -235,10 +235,8 @@ public class LoginPanel extends JFrame {
                             case "FINANCE" -> new FinanceDashboard(finalUser);
                             case "IT_SUPPORT" -> new ITSupportDashboard(finalUser);
                             default -> {
-                                JFrame empFrame = new JFrame("Employee Dashboard");
-                                empFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                                empFrame.add(new EmployeeDashboardPanel(finalUser));
-                                empFrame.setSize(800, 600);
+                                //  FIXED: Instantiated directly as its own window frame
+                                EmployeeDashboardPanel empFrame = new EmployeeDashboardPanel(finalUser);
                                 empFrame.setLocationRelativeTo(null);
                                 empFrame.setVisible(true);
                             }

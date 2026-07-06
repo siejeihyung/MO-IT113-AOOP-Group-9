@@ -19,16 +19,17 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+// ── IMPORT YOUR REPORT MODELS AND GENERATOR ──────────────────────────────────
+import reports.TimeCardModel;
+import reports.ReportGenerator;
 
 /**
  * EmployeeAttendancePanel — shown inside EmployeeDashboardPanel.
  * Allows an employee to clock in/out and view their own attendance history.
- *
- * Features:
- *  - Clock In / Clock Out buttons
- *  - Shows today's status (clocked in / not yet / done)
- *  - Table with date, login, logout, minutes late, hours worked, deduction
- *  - Summary: total hours worked this month
  */
 public class EmployeeAttendancePanel extends JPanel {
 
@@ -43,21 +44,18 @@ public class EmployeeAttendancePanel extends JPanel {
     // ── Status labels ─────────────────────────────────────────────────────────
     private JLabel statusLabel;
     private JLabel totalHoursLabel;
-    private JLabel clockInBtn;   // styled as button
-    private JLabel clockOutBtn;
 
     // ── Colors ────────────────────────────────────────────────────────────────
     private final Color HEADER_COLOR  = new Color(20, 50, 110);
     private final Color ROW_ALT       = new Color(220, 230, 250);
     private final Color LATE_COLOR    = new Color(255, 200, 200);
-    private final Color ON_TIME_COLOR = new Color(200, 240, 210);
     private final Color GREEN         = new Color(56, 142, 60);
     private final Color RED           = new Color(211, 47, 47);
+    private final Color ACCENT_BLUE   = new Color(29, 69, 143);
 
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm");
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
-    // ════════════════════════════════════════════════════════════════════════
     public EmployeeAttendancePanel(String employeeId) {
         this.employeeId       = employeeId;
         this.attendanceService = new AttendanceService(new AttendanceDAO());
@@ -73,19 +71,25 @@ public class EmployeeAttendancePanel extends JPanel {
         refreshAll();
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  Top section: Clock in/out + today's status + summary
-    // ════════════════════════════════════════════════════════════════════════
     private JPanel buildTopSection() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setOpaque(false);
 
-        // ── Title ─────────────────────────────────────────────────────────────
+        // Header sub-panel to balance the print button beautifully on the right side
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setOpaque(false);
+
         JLabel title = new JLabel("My Attendance");
         title.setFont(new Font("Segoe UI", Font.BOLD, 18));
         title.setForeground(Color.WHITE);
+        headerPanel.add(title, BorderLayout.WEST);
 
-        // ── Today's status card ───────────────────────────────────────────────
+        // 🟢 ADDED: Modern "Print Time Card" Button
+        JButton printButton = makeActionButton("🖨 Print Time Card", ACCENT_BLUE);
+        printButton.setPreferredSize(new Dimension(160, 32));
+        printButton.addActionListener(e -> handlePrintTimeCard());
+        headerPanel.add(printButton, BorderLayout.EAST);
+
         JPanel statusCard = new JPanel(new GridBagLayout());
         statusCard.setBackground(Color.WHITE);
         statusCard.setBorder(BorderFactory.createCompoundBorder(
@@ -97,20 +101,17 @@ public class EmployeeAttendancePanel extends JPanel {
         gc.insets = new Insets(5, 10, 5, 10);
         gc.anchor = GridBagConstraints.CENTER;
 
-        // Today label
         JLabel todayLabel = new JLabel("Today — " + LocalDate.now().toString());
         todayLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        todayLabel.setForeground(new Color(29, 69, 143));
+        todayLabel.setForeground(ACCENT_BLUE);
         gc.gridx = 0; gc.gridy = 0; gc.gridwidth = 2;
         statusCard.add(todayLabel, gc);
 
-        // Status text
         statusLabel = new JLabel("Checking...");
         statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         gc.gridy = 1;
         statusCard.add(statusLabel, gc);
 
-        // Clock In button
         gc.gridy = 2; gc.gridwidth = 1; gc.gridx = 0;
         JButton clockIn  = makeActionButton("🟢 Clock In",  GREEN);
         JButton clockOut = makeActionButton("🔴 Clock Out", RED);
@@ -122,7 +123,6 @@ public class EmployeeAttendancePanel extends JPanel {
         gc.gridx = 1;
         statusCard.add(clockOut, gc);
 
-        // ── Summary card ──────────────────────────────────────────────────────
         JPanel summaryCard = new JPanel();
         summaryCard.setLayout(new BoxLayout(summaryCard, BoxLayout.Y_AXIS));
         summaryCard.setBackground(Color.WHITE);
@@ -133,7 +133,7 @@ public class EmployeeAttendancePanel extends JPanel {
 
         JLabel summaryTitle = new JLabel("This Month");
         summaryTitle.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        summaryTitle.setForeground(new Color(29, 69, 143));
+        summaryTitle.setForeground(ACCENT_BLUE);
         summaryTitle.setAlignmentX(CENTER_ALIGNMENT);
 
         totalHoursLabel = new JLabel("0.0 hrs");
@@ -150,20 +150,16 @@ public class EmployeeAttendancePanel extends JPanel {
         summaryCard.add(totalHoursLabel);
         summaryCard.add(hoursSubLabel);
 
-        // ── Combine cards ─────────────────────────────────────────────────────
         JPanel cardsRow = new JPanel(new GridLayout(1, 2, 15, 0));
         cardsRow.setOpaque(false);
         cardsRow.add(statusCard);
         cardsRow.add(summaryCard);
 
-        panel.add(title,    BorderLayout.NORTH);
+        panel.add(headerPanel, BorderLayout.NORTH); // Added the composite title layer here
         panel.add(cardsRow, BorderLayout.CENTER);
         return panel;
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  Table section: attendance history
-    // ════════════════════════════════════════════════════════════════════════
     private JPanel buildTableSection() {
         JPanel panel = new JPanel(new BorderLayout(0, 8));
         panel.setOpaque(false);
@@ -172,7 +168,7 @@ public class EmployeeAttendancePanel extends JPanel {
         historyTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
         historyTitle.setForeground(Color.WHITE);
 
-        String[] cols = {"Date", "Clock In", "Clock Out", "Hours Worked", "Minutes Late", "Deduction (₱)"};
+        String[] cols = { "Date", "Day", "Time-In", "Break-Out", "Break-In", "Time-Out", "Total Hours Worked", "Remarks" };
         tableModel = new DefaultTableModel(cols, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -210,15 +206,64 @@ public class EmployeeAttendancePanel extends JPanel {
         return panel;
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  Clock In
-    // ════════════════════════════════════════════════════════════════════════
+    // ── 🟢 NEW: Handles mapping active table rows to the Jasper compilation engine ──
+    private void handlePrintTimeCard() {
+        if (tableModel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No history logs available to compile a report.", 
+                    "Print Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            List<TimeCardModel> reportData = new ArrayList<>();
+            java.text.SimpleDateFormat formatParser = new java.text.SimpleDateFormat("MM/dd/yyyy");
+
+            // Extract items dynamically from the 8 tracking data indices
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                String dateStr = String.valueOf(tableModel.getValueAt(i, 0));
+                String day     = String.valueOf(tableModel.getValueAt(i, 1));
+                String timeIn  = String.valueOf(tableModel.getValueAt(i, 2));
+                String breakOut= String.valueOf(tableModel.getValueAt(i, 3));
+                String breakIn = String.valueOf(tableModel.getValueAt(i, 4));
+                String timeOut = String.valueOf(tableModel.getValueAt(i, 5));
+                String hours   = String.valueOf(tableModel.getValueAt(i, 6));
+                String remarks = String.valueOf(tableModel.getValueAt(i, 7));
+
+                // Cleanly default or parse Date
+                java.util.Date rowDate;
+                try {
+                    rowDate = formatParser.parse(dateStr);
+                } catch (Exception parseEx) {
+                    rowDate = new java.util.Date(); // Safe layout processing fallback
+                }
+
+                // Pack parameters neatly into your TimeCardModel structure
+                TimeCardModel modelRow = new TimeCardModel(
+                    rowDate, day, timeIn, breakOut, breakIn, timeOut, hours, remarks
+                );
+                reportData.add(modelRow);
+            }
+
+            // Global configurations
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("companyName", "MotorPH");
+            parameters.put("employeeId", employeeId);
+
+            // Execute using your custom template router path!
+            ReportGenerator.generateReport("/reports/timecard.jrxml", reportData, parameters);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed processing print parameters:\n" + ex.getMessage(),
+                    "Jasper Engine Processing Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void handleClockIn() {
         String today = LocalDate.now().format(DATE_FMT);
 
-        // Check if already clocked in today
         for (String[] row : attendanceService.getAttendanceForEmployee(employeeId)) {
-            if (row[1].equals(today)) {
+            if (row.length > 1 && row[1].equals(today)) {
                 JOptionPane.showMessageDialog(this,
                         "You have already clocked in today at " + row[2] + ".",
                         "Already Clocked In", JOptionPane.INFORMATION_MESSAGE);
@@ -241,17 +286,14 @@ public class EmployeeAttendancePanel extends JPanel {
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  Clock Out
-    // ════════════════════════════════════════════════════════════════════════
     private void handleClockOut() {
         String today = LocalDate.now().format(DATE_FMT);
         boolean foundToday = false;
 
         for (String[] row : attendanceService.getAttendanceForEmployee(employeeId)) {
-            if (row[1].equals(today)) {
+            if (row.length > 1 && row[1].equals(today)) {
                 foundToday = true;
-                if (!row[3].isEmpty()) {
+                if (row.length > 3 && !row[3].isEmpty() && !row[3].equals("—")) {
                     JOptionPane.showMessageDialog(this,
                             "You have already clocked out today at " + row[3] + ".",
                             "Already Clocked Out", JOptionPane.INFORMATION_MESSAGE);
@@ -281,21 +323,8 @@ public class EmployeeAttendancePanel extends JPanel {
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  Refresh table + status + summary
-    // ════════════════════════════════════════════════════════════════════════
     private void refreshAll() {
         tableModel.setRowCount(0);
-
-        // Get employee hourly rate for deduction calculation
-        double hourlyRate = 0.0;
-        String[] empData = employeeService.getEmployeeById(employeeId);
-        if (empData != null && empData.length > 18) {
-            try { hourlyRate = Double.parseDouble(
-                    empData[18].replace(",", "").replace("\"", "").trim());
-            } catch (NumberFormatException ignored) {}
-        }
-
         double totalHours = 0.0;
         String today = LocalDate.now().format(DATE_FMT);
         String todayStatus = "Not clocked in yet";
@@ -303,50 +332,70 @@ public class EmployeeAttendancePanel extends JPanel {
         List<String[]> records = attendanceService.getAttendanceForEmployee(employeeId);
 
         for (String[] row : records) {
-            String date    = row.length > 1 ? row[1] : "";
-            String login   = row.length > 2 ? row[2] : "";
-            String logout  = row.length > 3 ? row[3] : "";
-
-            // Hours worked
-            double hours = 0.0;
-            if (!login.isEmpty() && !logout.isEmpty()) {
+            if (row.length == 8) {
+                tableModel.addRow(row);
+                
                 try {
-                    LocalTime in  = LocalTime.parse(login,  TIME_FMT);
-                    LocalTime out = LocalTime.parse(logout, TIME_FMT);
-                    hours = java.time.Duration.between(in, out).toMinutes() / 60.0;
-                    totalHours += hours;
+                    String hrsStr = row[6].replace(" hrs", "").trim();
+                    if (!hrsStr.equals("—") && !hrsStr.isEmpty()) {
+                        totalHours += Double.parseDouble(hrsStr);
+                    }
                 } catch (Exception ignored) {}
-            }
 
-            // Late minutes + deduction
-            int lateMin = attendanceService.calculateLateMinutes(login);
-            double deduction = attendanceService.calculateLateDeduction(lateMin, hourlyRate);
+                String date = row[0];
+                String login = row[2];
+                String logout = row[5];
+                
+                if (date.equals(today)) {
+                    if (!login.equals("—") && (logout.equals("—") || logout.isEmpty())) {
+                        todayStatus = "⏱ Clocked in at " + login + " — not yet clocked out";
+                    } else if (!login.equals("—")) {
+                        todayStatus = "✅ Done for today — " + login + " → " + logout;
+                    }
+                }
+            } else {
+                String date    = row.length > 1 ? row[1] : "";
+                String login   = row.length > 2 ? row[2] : "";
+                String logout  = row.length > 3 ? row[3] : "";
+                
+                double hours = 0.0;
+                if (!login.isEmpty() && !logout.isEmpty() && !login.equals("—") && !logout.equals("—")) {
+                    try {
+                        LocalTime in  = LocalTime.parse(login,  TIME_FMT);
+                        LocalTime out = LocalTime.parse(logout, TIME_FMT);
+                        hours = java.time.Duration.between(in, out).toMinutes() / 60.0;
+                        totalHours += hours;
+                    } catch (Exception ignored) {}
+                }
 
-            tableModel.addRow(new Object[]{
-                date,
-                login.isEmpty()  ? "—" : login,
-                logout.isEmpty() ? "—" : logout,
-                hours > 0 ? String.format("%.2f hrs", hours) : "—",
-                lateMin > 0 ? lateMin + " min" : "On time ✅",
-                deduction > 0 ? String.format("%.2f", deduction) : "0.00"
-            });
+                int lateMin = attendanceService.calculateLateMinutes(login);
+                String remarks = lateMin > 0 ? lateMin + " min Late" : "On Time";
 
-            // Update today's status card
-            if (date.equals(today)) {
-                if (!login.isEmpty() && logout.isEmpty()) {
-                    todayStatus = "⏱ Clocked in at " + login + " — not yet clocked out";
-                } else if (!login.isEmpty()) {
-                    todayStatus = "✅ Done for today — " + login + " → " + logout;
+                tableModel.addRow(new Object[]{
+                    date,
+                    "Weekday",
+                    login.isEmpty() ? "—" : login,
+                    "—",
+                    "—",
+                    logout.isEmpty() ? "—" : logout,
+                    hours > 0 ? String.format("%.2f hrs", hours) : "—",
+                    remarks
+                });
+
+                if (date.equals(today)) {
+                    if (!login.isEmpty() && logout.isEmpty()) {
+                        todayStatus = "⏱ Clocked in at " + login + " — not yet clocked out";
+                    } else if (!login.isEmpty()) {
+                        todayStatus = "✅ Done for today — " + login + " → " + logout;
+                    }
                 }
             }
         }
 
-        // Update labels
         statusLabel.setText(todayStatus);
         totalHoursLabel.setText(String.format("%.1f hrs", totalHours));
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
     private JButton makeActionButton(String text, Color bg) {
         JButton btn = new JButton(text);
         btn.setPreferredSize(new Dimension(130, 38));
@@ -369,16 +418,16 @@ public class EmployeeAttendancePanel extends JPanel {
         return btn;
     }
 
-    // ── Cell renderer: red rows for late, green for on time ──────────────────
     private class AttendanceCellRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable t, Object value,
                 boolean sel, boolean focus, int row, int col) {
             Component c = super.getTableCellRendererComponent(t, value, sel, focus, row, col);
             if (!sel) {
-                String lateVal = (String) tableModel.getValueAt(row, 4);
-                if (lateVal != null && lateVal.contains("min")) {
-                    c.setBackground(LATE_COLOR);    // late → light red
+                int remarksColumnIndex = t.getColumnCount() - 1;
+                String remarksVal = (String) tableModel.getValueAt(row, remarksColumnIndex);
+                if (remarksVal != null && (remarksVal.toLowerCase().contains("late") || remarksVal.toLowerCase().contains("min"))) {
+                    c.setBackground(LATE_COLOR);
                 } else {
                     c.setBackground(row % 2 == 0 ? Color.WHITE : ROW_ALT);
                 }
@@ -388,7 +437,6 @@ public class EmployeeAttendancePanel extends JPanel {
         }
     }
 
-    // ── Scrollbar ─────────────────────────────────────────────────────────────
     private static class ModernScrollBarUI extends BasicScrollBarUI {
         @Override protected void configureScrollBarColors() {
             thumbColor = new Color(150, 180, 220);
