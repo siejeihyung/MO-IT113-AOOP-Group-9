@@ -26,6 +26,18 @@ public class AttendanceService {
     public AttendanceService(AttendanceDAO attendanceDAO) {
         this.attendanceDAO = attendanceDAO;
     }
+    
+    // ── Missing Time Card Method ─────────────────────────────────────────────
+    /**
+     * Resolves compile error in HRDashboard.
+     * Fetches attendance lines and bridges them into report data formats.
+     */
+    public List<?> getTimeCardData(String employeeId) {
+        List<String[]> rawAttendance = attendanceDAO.findByEmployeeId(employeeId);
+        
+        // If your report template directly accepts an ArrayList of String[], return this:
+        return rawAttendance;
+    }
 
     // ── Clock In ─────────────────────────────────────────────────────────────
     public boolean clockIn(String employeeId, String employeeName) {
