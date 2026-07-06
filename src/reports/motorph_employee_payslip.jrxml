@@ -259,7 +259,7 @@
                 <text><![CDATA[Philhealth]]></text>
             </staticText>
             <textField pattern="₱#,##0.00">
-                <reportElement style="Money" x="330" y="458" width="165" height="16" uuid="03937f62-7538-4d1b-9835-a643eeab7f10b"/>
+                <reportElement style="Money" x="330" y="458" width="165" height="16" uuid="03937f62-7538-4d1b-9835-a643eeab7f10"/>
                 <textFieldExpression><![CDATA[$F{philhealth}]]></textFieldExpression>
             </textField>
             <staticText>

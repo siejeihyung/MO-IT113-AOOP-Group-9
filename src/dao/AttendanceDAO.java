@@ -10,14 +10,17 @@ import java.util.*;
 public class AttendanceDAO {
 
     // ── Create ──────────────────────────────────────────────────────────────
-    public boolean append(String employeeId, String date, String timeIn, String timeOut) {
-        String query = "INSERT INTO Attendance (EmployeeID, AttendanceDate, TimeIn, TimeOut) VALUES (?, ?, ?, ?)";
+    public boolean append(String employeeId, String date, String timeIn, String breakOut, String breakIn, String timeOut, String remarks) {
+        String query = "INSERT INTO Attendance (EmployeeID, AttendanceDate, TimeIn, BreakOut, BreakIn, TimeOut, Remarks) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, employeeId);
             pstmt.setString(2, date);
             pstmt.setString(3, timeIn);
-            pstmt.setString(4, timeOut);
+            pstmt.setString(4, breakOut);
+            pstmt.setString(5, breakIn);
+            pstmt.setString(6, timeOut);
+            pstmt.setString(7, remarks);
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -25,10 +28,10 @@ public class AttendanceDAO {
         }
     }
 
-    // ── Read ────────────────────────────────────────────────────────────────
+    // ── Read All ────────────────────────────────────────────────────────────
     public List<String[]> findAll() {
         List<String[]> list = new ArrayList<>();
-        String query = "SELECT EmployeeID, AttendanceDate, TimeIn, TimeOut FROM Attendance";
+        String query = "SELECT EmployeeID, AttendanceDate, TimeIn, BreakOut, BreakIn, TimeOut, Remarks FROM Attendance";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query);
              ResultSet rs = pstmt.executeQuery()) {
@@ -37,7 +40,10 @@ public class AttendanceDAO {
                     rs.getString("EmployeeID"),
                     rs.getString("AttendanceDate"),
                     rs.getString("TimeIn"),
-                    rs.getString("TimeOut")
+                    rs.getString("BreakOut"),
+                    rs.getString("BreakIn"),
+                    rs.getString("TimeOut"),
+                    rs.getString("Remarks")
                 });
             }
         } catch (SQLException e) {
@@ -46,20 +52,25 @@ public class AttendanceDAO {
         return list;
     }
 
+    // ── Read Single Employee ────────────────────────────────────────────────
     public List<String[]> findByEmployeeId(String employeeId) {
         List<String[]> list = new ArrayList<>();
-        String query = "SELECT EmployeeID, AttendanceDate, TimeIn, TimeOut FROM Attendance WHERE EmployeeID = ?";
+        String query = "SELECT EmployeeID, AttendanceDate, TimeIn, BreakOut, BreakIn, TimeOut, Remarks FROM Attendance WHERE EmployeeID = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, employeeId);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                list.add(new String[]{
-                    rs.getString("EmployeeID"),
-                    rs.getString("AttendanceDate"),
-                    rs.getString("TimeIn"),
-                    rs.getString("TimeOut")
-                });
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new String[]{
+                        rs.getString("EmployeeID"),
+                        rs.getString("AttendanceDate"),
+                        rs.getString("TimeIn"),
+                        rs.getString("BreakOut"),
+                        rs.getString("BreakIn"),
+                        rs.getString("TimeOut"),
+                        rs.getString("Remarks")
+                    });
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -68,14 +79,17 @@ public class AttendanceDAO {
     }
 
     // ── Update ──────────────────────────────────────────────────────────────
-    public boolean update(String employeeId, String date, String timeIn, String timeOut) {
-        String query = "UPDATE Attendance SET TimeIn = ?, TimeOut = ? WHERE EmployeeID = ? AND AttendanceDate = ?";
+    public boolean update(String employeeId, String date, String timeIn, String breakOut, String breakIn, String timeOut, String remarks) {
+        String query = "UPDATE Attendance SET TimeIn = ?, BreakOut = ?, BreakIn = ?, TimeOut = ?, Remarks = ? WHERE EmployeeID = ? AND AttendanceDate = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, timeIn);
-            pstmt.setString(2, timeOut);
-            pstmt.setString(3, employeeId);
-            pstmt.setString(4, date);
+            pstmt.setString(2, breakOut);
+            pstmt.setString(3, breakIn);
+            pstmt.setString(4, timeOut);
+            pstmt.setString(5, remarks);
+            pstmt.setString(6, employeeId);
+            pstmt.setString(7, date);
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
