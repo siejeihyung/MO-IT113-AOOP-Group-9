@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="motorph_employee_timecard"
+              pageWidth="792"
+              pageHeight="612"
+              orientation="Landscape"
+              columnWidth="680"
+              leftMargin="56"
+              rightMargin="56"
+              topMargin="42"
+              bottomMargin="42">
+
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+
+    <style name="Base" fontName="SansSerif" fontSize="6" forecolor="#111111"/>
+    <style name="Title" fontName="SansSerif" fontSize="12" isBold="true" forecolor="#111111" hTextAlign="Center"/>
+    <style name="InfoLabel" fontName="SansSerif" fontSize="6" isBold="true" forecolor="#111111" vTextAlign="Middle"/>
+    <style name="InfoValue" fontName="SansSerif" fontSize="7" forecolor="#111111" vTextAlign="Middle"/>
+    <style name="Header" fontName="SansSerif" fontSize="7" isBold="true" forecolor="#111111" hTextAlign="Center" vTextAlign="Middle"/>
+    <style name="Cell" fontName="SansSerif" fontSize="7" forecolor="#111111" vTextAlign="Middle"/>
+    <style name="CellCenter" style="Cell" hTextAlign="Center"/>
+
+    <parameter name="employeeId" class="java.lang.String">
+        <defaultValueExpression><![CDATA["15"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="periodEndDate" class="java.lang.String">
+        <defaultValueExpression><![CDATA["MM/DD/YYYY"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="employeeName" class="java.lang.String">
+        <defaultValueExpression><![CDATA["Employee Name"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="employeePositionDepartment" class="java.lang.String">
+        <defaultValueExpression><![CDATA["Position / Department"]]></defaultValueExpression>
+    </parameter>
+
+    <field name="date" class="java.util.Date"/>
+    <field name="day" class="java.lang.String"/>
+    <field name="timeIn" class="java.lang.String"/>
+    <field name="breakOut" class="java.lang.String"/>
+    <field name="breakIn" class="java.lang.String"/>
+    <field name="timeOut" class="java.lang.String"/>
+    <field name="totalHoursWorked" class="java.lang.String"/>
+    <field name="remarks" class="java.lang.String"/>
+
+    <title>
+        <band height="88" splitType="Stretch">
+            <staticText>
+                <reportElement style="Title" x="0" y="0" width="680" height="18"/>
+                <text><![CDATA[EMPLOYEE TIMECARD]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement style="InfoLabel" x="95" y="32" width="72" height="10"/>
+                <text><![CDATA[EMPLOYEE ID]]></text>
+            </staticText>
+            <textField>
+                <reportElement style="InfoValue" x="168" y="31" width="92" height="12"/>
+                <textFieldExpression><![CDATA[$P{employeeId}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement style="InfoLabel" x="272" y="32" width="92" height="10"/>
+                <text><![CDATA[PERIOD END DATE]]></text>
+            </staticText>
+            <textField>
+                <reportElement style="InfoValue" x="367" y="31" width="120" height="12"/>
+                <textFieldExpression><![CDATA[$P{periodEndDate}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement style="InfoLabel" x="95" y="48" width="72" height="10"/>
+                <text><![CDATA[EMPLOYEE NAME]]></text>
+            </staticText>
+            <textField>
+                <reportElement style="InfoValue" x="168" y="47" width="135" height="12"/>
+                <textFieldExpression><![CDATA[$P{employeeName}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement style="InfoLabel" x="272" y="48" width="92" height="10"/>
+                <text><![CDATA[EMPLOYEE POSITION/DEPARTMENT]]></text>
+            </staticText>
+            <textField>
+                <reportElement style="InfoValue" x="367" y="47" width="220" height="12"/>
+                <textFieldExpression><![CDATA[$P{employeePositionDepartment}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="18" splitType="Stretch">
+            <staticText><reportElement style="Header" x="95" y="0" width="42" height="14"/><text><![CDATA[Date]]></text></staticText>
+            <staticText><reportElement style="Header" x="137" y="0" width="44" height="14"/><text><![CDATA[Day]]></text></staticText>
+            <staticText><reportElement style="Header" x="181" y="0" width="58" height="14"/><text><![CDATA[Time In]]></text></staticText>
+            <staticText><reportElement style="Header" x="239" y="0" width="62" height="14"/><text><![CDATA[Break Out]]></text></staticText>
+            <staticText><reportElement style="Header" x="301" y="0" width="58" height="14"/><text><![CDATA[Break In]]></text></staticText>
+            <staticText><reportElement style="Header" x="359" y="0" width="58" height="14"/><text><![CDATA[Time Out]]></text></staticText>
+            <staticText><reportElement style="Header" x="417" y="0" width="92" height="14"/><text><![CDATA[Total Hours Worked]]></text></staticText>
+            <staticText><reportElement style="Header" x="509" y="0" width="118" height="14"/><text><![CDATA[Remarks]]></text></staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="11" splitType="Stretch">
+            <textField isBlankWhenNull="true">
+                <reportElement style="Cell" x="95" y="0" width="42" height="10"/>
+                <textFieldExpression><![CDATA[$F{date} == null ? "" : new java.text.SimpleDateFormat("MMM dd").format($F{date})]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement style="CellCenter" x="137" y="0" width="44" height="10"/>
+                <textFieldExpression><![CDATA[$F{day} != null && !$F{day}.isEmpty() ? $F{day} : ($F{date} == null ? "" : new java.text.SimpleDateFormat("EEE").format($F{date}))]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement style="CellCenter" x="181" y="0" width="58" height="10"/>
+                <textFieldExpression><![CDATA[$F{timeIn}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement style="CellCenter" x="239" y="0" width="62" height="10"/>
+                <textFieldExpression><![CDATA[$F{breakOut}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement style="CellCenter" x="301" y="0" width="58" height="10"/>
+                <textFieldExpression><![CDATA[$F{breakIn}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement style="CellCenter" x="359" y="0" width="58" height="10"/>
+                <textFieldExpression><![CDATA[$F{timeOut}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement style="CellCenter" x="417" y="0" width="92" height="10"/>
+                <textFieldExpression><![CDATA[$F{totalHoursWorked}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement style="Cell" x="509" y="0" width="118" height="10"/>
+                <textFieldExpression><![CDATA[$F{remarks}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+</jasperReport>
