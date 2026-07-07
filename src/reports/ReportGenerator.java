@@ -49,7 +49,7 @@ public class ReportGenerator {
         }
 
         // Use try-with-resources here as well
-        try (InputStream reportStream = ReportGenerator.class.getResourceAsStream("/reports/motorph_employee_payslip.jrxml")) {
+        try (InputStream reportStream = ReportGenerator.class.getResourceAsStream("/reports/filename")) {
             
             if (reportStream == null) {
                 throw new JRException("Layout file not found.");

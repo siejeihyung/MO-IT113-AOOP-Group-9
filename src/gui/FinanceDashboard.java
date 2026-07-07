@@ -201,7 +201,7 @@ public class FinanceDashboard extends JFrame {
             params.put("totalRecords", tableModel.getRowCount());
             params.put("periodEndDate", "07/15/2026");
 
-            reports.ReportGenerator.generateReport("/reports/motorph_payroll_summary.jrxml", summaryData, params);
+            reports.ReportGenerator.generateReport("/reports/filename", summaryData, params);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Failed to compile corporate summary: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

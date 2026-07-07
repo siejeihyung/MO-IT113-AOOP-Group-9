@@ -293,10 +293,10 @@ public class EmployeeAttendancePanel extends JPanel {
 
             // 4. LOAD THE PRE-COMPILED .JASPER FILE
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportDataList);
-            java.io.InputStream reportStream = getClass().getResourceAsStream("/reports/timecard.jasper");
+            java.io.InputStream reportStream = getClass().getResourceAsStream("file name");
             
             if (reportStream == null) {
-                throw new java.io.FileNotFoundException("Could not find 'timecard.jasper' in /reports/ path. Please ensure it is compiled and moved there.");
+                throw new java.io.FileNotFoundException("Could not find 'file name' in /reports/ path. Please ensure it is compiled and moved there.");
             }
 
             // 5. Fill and View

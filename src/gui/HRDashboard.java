@@ -239,7 +239,7 @@ public class HRDashboard extends JFrame {
             params.put("employeeName", "Employee #" + empId);
             params.put("periodEndDate", "07/15/2026");
 
-            reports.ReportGenerator.generateReport("/reports/motorph_employee_timecard.jrxml", timeCardList, params);
+            reports.ReportGenerator.generateReport("/reports/filename", timeCardList, params);
             
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error generating summary: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
