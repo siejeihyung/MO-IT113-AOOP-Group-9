@@ -20,16 +20,17 @@ This milestone marks the successful migration of the MotorPH Payroll System from
 *   **Model Upgrades:** Enhanced `Employee` model and `RegularEmployee` subclass to support comprehensive payroll fields including SSS, PhilHealth, TIN, and Pag-IBIG.
 
 ## Technical Stack
-- **Database**: MySQL 8.0
-- **Connectivity**: Java Database Connectivity (JDBC)
-- **IDE**: Apache NetBeans
-- **Driver**: MySQL Connector/J
+*   **Database:** MySQL 8.0
+*   **Connectivity:** Java Database Connectivity (JDBC)
+*   **Reporting:** JasperReports
+*   **IDE:** Apache NetBeans
+*   **Driver:** MySQL Connector/J
 
 ## Accomplishments
-- [x] Established `motorph_payroll` database schema.
-- [x] Implemented JDBC connection utility for centralized configuration.
-- [x] Migrated authentication service to query live database records.
-- [x] Updated GUI-to-DAO communication to populate dashboards using real-time SQL queries.
+*   Established `motorph_payroll` database schema.
+*   Implemented JDBC connection utility for centralized configuration.
+*   Migrated authentication service to query live database records.
+*   Updated GUI-to-DAO communication to populate dashboards using real-time SQL queries.
 
 ## 👥 Project Team & Contributions
 
