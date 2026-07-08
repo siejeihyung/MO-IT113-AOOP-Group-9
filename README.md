@@ -32,6 +32,20 @@ This milestone marks the successful migration of the MotorPH Payroll System from
 *   Migrated authentication service to query live database records.
 *   Updated GUI-to-DAO communication to populate dashboards using real-time SQL queries.
 
+  ## 🗺️ System Navigation & Testing Credentials
+
+To review the JasperReports integration, use the following test credentials to log into their respective dashboards:
+
+#### 💰 Payroll Summary & Payslip Reports
+* **Role:** Finance
+* **Username:** `finance`
+* **Password:** `finance123`
+
+#### ⏱️ TimeCard Reports
+* **Role:** Human Resources (HR)
+* **Username:** `hr`
+* **Password:** `hr123`
+
 ## 👥 Project Team & Contributions
 
 Our team is dedicated to transitioning our data infrastructure from legacy CSV files into a fully functional, optimized SQL database, complete with robust backend logic, polished GUI components, and dynamic JasperReports reporting.
