@@ -1,0 +1,153 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="motorph_employee_timecard" language="java" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="680" leftMargin="56" rightMargin="56" topMargin="42" bottomMargin="42" uuid="093b095b-fe73-4af5-af6d-f743fcb03cdf">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="Base" forecolor="#111111" fontName="SansSerif" fontSize="6.0"/>
+	<style name="Title" forecolor="#111111" hTextAlign="Center" fontName="SansSerif" fontSize="12.0" bold="true"/>
+	<style name="InfoLabel" forecolor="#111111" vTextAlign="Middle" fontName="SansSerif" fontSize="6.0" bold="true"/>
+	<style name="InfoValue" forecolor="#111111" vTextAlign="Middle" fontName="SansSerif" fontSize="7.0"/>
+	<style name="Header" forecolor="#111111" hTextAlign="Center" vTextAlign="Middle" fontName="SansSerif" fontSize="7.0" bold="true"/>
+	<style name="Cell" forecolor="#111111" vTextAlign="Middle" fontName="SansSerif" fontSize="7.0"/>
+	<style name="CellCenter" style="Cell" hTextAlign="Center"/>
+	<parameter name="employeeId" class="java.lang.String">
+		<defaultValueExpression><![CDATA["15"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="periodEndDate" class="java.lang.String">
+		<defaultValueExpression><![CDATA["MM/DD/YYYY"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeName" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Employee Name"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeePositionDepartment" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Position / Department"]]></defaultValueExpression>
+	</parameter>
+	<query language="SQL"><![CDATA[SELECT 
+    `Date` AS `date`,
+    "" AS `day`,
+    TimeIn AS timeIn, 
+    "12:00 PM" AS breakOut,
+    "1:00 PM" AS breakIn,
+    TimeOut AS timeOut, 
+    "8.0" AS totalHoursWorked,
+    "Regular" AS remarks
+FROM motorph_payroll.attendance
+WHERE EmployeeID = $P{employeeId}]]></query>
+	<field name="date" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="Date"/>
+		<property name="com.jaspersoft.studio.field.label" value="date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="attendance"/>
+	</field>
+	<field name="day" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="day"/>
+		<property name="com.jaspersoft.studio.field.label" value="day"/>
+	</field>
+	<field name="timeIn" class="java.sql.Time">
+		<property name="com.jaspersoft.studio.field.name" value="TimeIn"/>
+		<property name="com.jaspersoft.studio.field.label" value="timeIn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="attendance"/>
+	</field>
+	<field name="breakOut" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="breakOut"/>
+		<property name="com.jaspersoft.studio.field.label" value="breakOut"/>
+	</field>
+	<field name="breakIn" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="breakIn"/>
+		<property name="com.jaspersoft.studio.field.label" value="breakIn"/>
+	</field>
+	<field name="timeOut" class="java.sql.Time">
+		<property name="com.jaspersoft.studio.field.name" value="TimeOut"/>
+		<property name="com.jaspersoft.studio.field.label" value="timeOut"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="attendance"/>
+	</field>
+	<field name="totalHoursWorked" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="totalHoursWorked"/>
+		<property name="com.jaspersoft.studio.field.label" value="totalHoursWorked"/>
+	</field>
+	<field name="remarks" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="remarks"/>
+		<property name="com.jaspersoft.studio.field.label" value="remarks"/>
+	</field>
+	<title height="88" splitType="Stretch">
+		<element kind="staticText" uuid="cafde063-e735-43db-ace7-fb0ba907d03d" x="0" y="0" width="680" height="18" style="Title">
+			<text><![CDATA[EMPLOYEE TIMECARD]]></text>
+		</element>
+		<element kind="staticText" uuid="730d90fb-7bfa-49ac-b50a-fd0c88bba42f" x="95" y="32" width="72" height="10" style="InfoLabel">
+			<text><![CDATA[EMPLOYEE ID]]></text>
+		</element>
+		<element kind="textField" uuid="f6e7820d-1d60-4e94-bc0b-74f64415b456" x="168" y="31" width="92" height="12" style="InfoValue">
+			<expression><![CDATA[$P{employeeId}]]></expression>
+		</element>
+		<element kind="staticText" uuid="1f7fd6bb-303b-4bf7-a0d4-c1be8d0d78a3" x="272" y="32" width="92" height="10" style="InfoLabel">
+			<text><![CDATA[PERIOD END DATE]]></text>
+		</element>
+		<element kind="textField" uuid="fc0ac911-25e2-4f15-9b48-103d7b4a07b2" x="367" y="31" width="120" height="12" style="InfoValue">
+			<expression><![CDATA[$P{periodEndDate}]]></expression>
+		</element>
+		<element kind="staticText" uuid="3998737f-5cf4-43ee-8f48-1a82728bf917" x="95" y="48" width="72" height="10" style="InfoLabel">
+			<text><![CDATA[EMPLOYEE NAME]]></text>
+		</element>
+		<element kind="textField" uuid="46084952-b92e-4d64-b3f2-dbf258efd016" x="168" y="47" width="135" height="12" style="InfoValue">
+			<expression><![CDATA[$P{employeeName}]]></expression>
+		</element>
+		<element kind="staticText" uuid="2eb473d0-ea77-4299-b2c8-665d06d9632c" x="272" y="48" width="92" height="10" style="InfoLabel">
+			<text><![CDATA[EMPLOYEE POSITION/DEPARTMENT]]></text>
+		</element>
+		<element kind="textField" uuid="6915dc48-28e2-47af-97e4-8c1a6ca5df06" x="367" y="47" width="220" height="12" style="InfoValue">
+			<expression><![CDATA[$P{employeePositionDepartment}]]></expression>
+		</element>
+	</title>
+	<columnHeader height="18" splitType="Stretch">
+		<element kind="staticText" uuid="eb7de3d7-3adf-4e65-8a8c-9f0742fcd37b" x="95" y="0" width="42" height="14" style="Header">
+			<text><![CDATA[Date]]></text>
+		</element>
+		<element kind="staticText" uuid="f0160256-f68f-4c53-8ba0-4401cc64fe7b" x="137" y="0" width="44" height="14" style="Header">
+			<text><![CDATA[Day]]></text>
+		</element>
+		<element kind="staticText" uuid="22f9874f-e374-4404-b1d7-db3ade6b5829" x="181" y="0" width="58" height="14" style="Header">
+			<text><![CDATA[Time In]]></text>
+		</element>
+		<element kind="staticText" uuid="2d26f7fc-403a-463e-9ebc-0fcec1083387" x="239" y="0" width="62" height="14" style="Header">
+			<text><![CDATA[Break Out]]></text>
+		</element>
+		<element kind="staticText" uuid="8dfff583-6108-41ae-818d-f6bc510a5c23" x="301" y="0" width="58" height="14" style="Header">
+			<text><![CDATA[Break In]]></text>
+		</element>
+		<element kind="staticText" uuid="044ed8ec-da3e-42c4-8744-26a21b040fc1" x="359" y="0" width="58" height="14" style="Header">
+			<text><![CDATA[Time Out]]></text>
+		</element>
+		<element kind="staticText" uuid="2d1eb070-031a-48e9-8810-e11a97d53e74" x="417" y="0" width="92" height="14" style="Header">
+			<text><![CDATA[Total Hours Worked]]></text>
+		</element>
+		<element kind="staticText" uuid="cbf302b4-93f2-48a4-b9a5-55fd93867119" x="509" y="0" width="118" height="14" style="Header">
+			<text><![CDATA[Remarks]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<element kind="textField" uuid="ae919220-1d6c-4fc4-a7e8-431b3f23eefb" x="95" y="0" width="42" height="10" blankWhenNull="true" style="Cell">
+				<expression><![CDATA[$F{date} == null ? "" : new java.text.SimpleDateFormat("MMM dd").format($F{date})]]></expression>
+			</element>
+			<element kind="textField" uuid="565b7dd5-aedf-4b6c-8202-7c6f181bdeca" x="137" y="0" width="44" height="10" blankWhenNull="true" style="CellCenter">
+				<expression><![CDATA[$F{day} != null && !$F{day}.isEmpty() ? $F{day} : ($F{date} == null ? "" : new java.text.SimpleDateFormat("EEE").format($F{date}))]]></expression>
+			</element>
+			<element kind="textField" uuid="ba9709da-23ff-486e-a898-1935f49c2bbf" x="181" y="0" width="58" height="10" blankWhenNull="true" style="CellCenter">
+				<expression><![CDATA[$F{timeIn}]]></expression>
+			</element>
+			<element kind="textField" uuid="47b14163-7e51-4987-ba5f-182ef02105e1" x="239" y="0" width="62" height="10" blankWhenNull="true" style="CellCenter">
+				<expression><![CDATA[$F{breakOut}]]></expression>
+			</element>
+			<element kind="textField" uuid="b6f5883d-fb18-41c2-92fd-32a38cfcce51" x="301" y="0" width="58" height="10" blankWhenNull="true" style="CellCenter">
+				<expression><![CDATA[$F{breakIn}]]></expression>
+			</element>
+			<element kind="textField" uuid="2f0f83be-e71a-43c6-84f1-9870dc13da75" x="359" y="0" width="58" height="10" blankWhenNull="true" style="CellCenter">
+				<expression><![CDATA[$F{timeOut}]]></expression>
+			</element>
+			<element kind="textField" uuid="2812fe91-8605-4cca-a282-8aabee44d139" x="417" y="0" width="92" height="10" blankWhenNull="true" style="CellCenter">
+				<expression><![CDATA[$F{totalHoursWorked}]]></expression>
+			</element>
+			<element kind="textField" uuid="77b9c3d0-1895-4825-a110-a2943950ba98" x="509" y="0" width="118" height="10" blankWhenNull="true" style="Cell">
+				<expression><![CDATA[$F{remarks}]]></expression>
+			</element>
+		</band>
+	</detail>
+</jasperReport>
