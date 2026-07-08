@@ -31,10 +31,25 @@ This milestone marks the successful migration of the MotorPH Payroll System from
 - [x] Migrated authentication service to query live database records.
 - [x] Updated GUI-to-DAO communication to populate dashboards using real-time SQL queries.
 
-## Next Steps
-- Implement full CRUD (Create, Read, Update, Delete) operations in `EmployeeDAO`.
-- Migrate attendance and salary history data from legacy files.
-- Optimize payroll computation logic using the new database-backed models.
+## 👥 Project Team & Contributions
 
+Our team is dedicated to transitioning our data infrastructure from legacy CSV files into a fully functional, optimized SQL database, complete with robust backend logic, polished GUI components, and dynamic JasperReports reporting.
+
+## 🛠️ Core Team & Roles
+
+| Member | Role | Primary Responsibilities |
+| :--- | :--- | :--- |
+| **Carl John Pontanilla** | Project Lead | • Spearheads the gradual transition and cleaning of legacy CSV files into a structured SQL database.<br>• Manages the implementation and generation of print-ready `.jrxml` files. |
+| **Sunny Eljohn Lico** | Assistant Lead | • Directs backend optimization, refactoring code from OOP to Advanced OOP (AOOP).<br>• Integrates and fixes GUI components for JasperReports, ensuring seamless SQL-to-report compilation and clean `.jrxml` files. |
+| **Isidro Romano** | Database Architecture Lead | • Architects and manages the overall SQL database schema.<br>• Ensures end-to-end database functionality, data integrity, and cross-platform performance. |
+| **Anton Roger Galfo** | Architecture Design (GUI) Lead | • Designs and polishes the CRUD interfaces for all core modules: *HR, Finance, IT Support, Admin,* and *Employee*.<br>• Coordinates and executes internal system testing. |
+
+## 📝 Documentation
+* **All Team Members** contribute equally to fulfilling system requirements, writing technical documentation, and maintaining project records.
+
+## 🚀 Next Steps
+
+1. **JasperReports Optimization:** The development team will refine and enhance the formatting, data mapping, and visual layout of the generated report outputs.
+2. **UI/UX Polishing:** The front-end team will clean up the user interface, specifically addressing layout sizing, responsiveness, and component alignment on the Employee Dashboard.
 ---
 *Developed by: Group 9 (A2101)*
