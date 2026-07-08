@@ -3,12 +3,21 @@
 ## Overview
 This milestone marks the successful migration of the MotorPH Payroll System from a legacy CSV-based flat-file storage system to a robust, relational database architecture using MySQL and JDBC. This transition ensures data integrity, enhances security through RBAC, and lays the foundation for enterprise-level payroll processing.
 
+## Functional Features
+*   **Login Functionality:** Secure user authentication system.
+*   **Role-Based Access Control (RBAC):** Permissions managed based on user roles.
+*   **Employee Management:** Full CRUD (Create, Read, Update, and Delete) capabilities for employee records, restricted by user roles.
+*   **Reporting Functionality (JasperReports):**
+    *   Payslip generation for each employee.
+    *   Comprehensive Payroll Reports.
+    *   Time card generation.
+    
 ## Key Changes
-- **Database Schema**: Transitioned from raw CSV data to a normalized MySQL schema (Tables: `Employee`, `Role`, `UserAccount`, `UserRole`, `EmployeeDetails`).
-- **Persistence Layer**: Implemented the DAO (Data Access Object) pattern. All data operations are now handled via `DatabaseConnection` and JDBC, replacing `FileHandler` logic.
-- **Authentication**: Refactored the login system to authenticate against a database-backed `UserAccount` table, supporting Role-Based Access Control (RBAC).
-- **Driver Integration**: Configured MySQL Connector/J in the project classpath for reliable database communication.
-- **Model Upgrades**: Enhanced `Employee` model and `RegularEmployee` subclass to support comprehensive payroll fields including SSS, PhilHealth, TIN, and Pag-IBIG.
+*   **Database Schema:** Transitioned from raw CSV data to a normalized MySQL schema (Tables: `Employee`, `Role`, `UserAccount`, `UserRole`, `EmployeeDetails`).
+*   **Persistence Layer:** Implemented the DAO (Data Access Object) pattern. All data operations are now handled via `DatabaseConnection` and JDBC, replacing `FileHandler` logic.
+*   **Authentication:** Refactored the login system to authenticate against a database-backed `UserAccount` table.
+*   **Driver Integration:** Configured MySQL Connector/J in the project classpath for reliable database communication.
+*   **Model Upgrades:** Enhanced `Employee` model and `RegularEmployee` subclass to support comprehensive payroll fields including SSS, PhilHealth, TIN, and Pag-IBIG.
 
 ## Technical Stack
 - **Database**: MySQL 8.0
