@@ -46,6 +46,19 @@ To review the JasperReports integration, use the following test credentials to l
 * **Username:** `hr`
 * **Password:** `hr123`
 
+### Other Credentials for CRUD Purposes
+* **Role:** Employee
+* **Username:** `[Employee ID]`
+* **Password:** `[Employee's Surname]`
+
+* **Role:** IT Support
+* **Username:** `it_support`
+* **Password:** `it123`
+
+* * **Role:** Admin
+* **Username:** `admin`
+* **Password:** `admin123`
+
 ## 👥 Project Team & Contributions
 
 Our team is dedicated to transitioning our data infrastructure from legacy CSV files into a fully functional, optimized SQL database, complete with robust backend logic, polished GUI components, and dynamic JasperReports reporting.
