@@ -53,7 +53,7 @@ To review the JasperReports integration, use the following test credentials to l
 
 * **Role:** IT Support
 * **Username:** `it_support`
-* **Password:** `it123`
+* **Password:** `support123`
 
 * * **Role:** Admin
 * **Username:** `admin`
