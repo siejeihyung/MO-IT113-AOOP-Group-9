@@ -57,7 +57,7 @@ To review the JasperReports integration, use the following test credentials to l
 
 * * **Role:** Admin
 * **Username:** `admin`
-* **Password:** `admin123`
+* **Password:** `1234`
 
 ## 👥 Project Team & Contributions
 
