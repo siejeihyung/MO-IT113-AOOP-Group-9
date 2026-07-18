@@ -25,12 +25,35 @@ This milestone marks the successful migration of the MotorPH Payroll System from
 *   **Reporting:** JasperReports
 *   **IDE:** Apache NetBeans
 *   **Driver:** MySQL Connector/J
+*   **Testing:** JUnit 5
 
 ## Accomplishments
 *   Established `motorph_payroll` database schema.
 *   Implemented JDBC connection utility for centralized configuration.
 *   Migrated authentication service to query live database records.
 *   Updated GUI-to-DAO communication to populate dashboards using real-time SQL queries.
+*   The project includes 11 JUnit 5 unit tests stored separately from the production code under the test/ folder.
+
+    **Test Coverage**
+
+        **Employee Retrieval:** Verifies employee retrieval using valid and invalid employee IDs.
+
+        **Employee Records:** Verifies the retrieval of all available employee records.
+
+        **Payroll Calculations:** Verifies gross and net weekly salary calculations, including salary calculations without allowances.
+
+        **Lateness Deduction:** Verifies the calculation of per-minute deductions based on an employee’s hourly rate.
+
+        **SSS Contribution:** Verifies that the correct contribution is returned according to the employee’s salary bracket.
+
+        **PhilHealth Contribution:** Verifies the minimum and maximum employee contribution limits.
+
+        **Pag-IBIG Contribution:** Verifies that the employee contribution does not exceed the established contribution cap.
+
+        **Employee Salary Validation:** Verifies that negative basic salary values are rejected without replacing the employee’s existing salary.
+
+        **Test Isolation:** The EmployeeService tests use a test-only fake DAO. This allows the tests to run without connecting to MySQL or modifying database records.
+
 
   ## 🗺️ System Navigation & Testing Credentials
 
