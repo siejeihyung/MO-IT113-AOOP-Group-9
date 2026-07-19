@@ -1,0 +1,212 @@
+<!-- Created with Jaspersoft Studio version 7.0.6.final using JasperReports Library version 7.0.6-5d2a603fdc6b3db8f842a83383e594f41891534d  -->
+<jasperReport name="motorph_payroll_summary_report" language="java" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="784" leftMargin="29" rightMargin="29" topMargin="28" bottomMargin="28" uuid="0a4f940a-778b-4502-aa3f-bb3a3340b7f2">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Base" forecolor="#111111" fontName="SansSerif" fontSize="6.0"/>
+	<style name="CompanyName" forecolor="#1F3763" fontName="SansSerif" fontSize="18.0" bold="true" italic="true"/>
+	<style name="CompanyInfo" forecolor="#1F3763" fontName="SansSerif" fontSize="5.0" bold="true"/>
+	<style name="ReportTitle" forecolor="#1F3763" fontName="SansSerif" fontSize="8.0" bold="true"/>
+	<style name="Header" forecolor="#FFFFFF" backcolor="#2F3D4E" hTextAlign="Center" vTextAlign="Middle" fontName="SansSerif" fontSize="5.0" bold="true"/>
+	<style name="Cell" forecolor="#111111" vTextAlign="Middle" fontName="SansSerif" fontSize="5.0"/>
+	<style name="CellCenter" style="Cell" hTextAlign="Center"/>
+	<style name="Money" style="Cell" hTextAlign="Right"/>
+	<style name="Total" forecolor="#111111" vTextAlign="Middle" fontName="SansSerif" fontSize="5.0" bold="true"/>
+	<style name="TotalMoney" style="Total" hTextAlign="Right"/>
+	<parameter name="companyName" class="java.lang.String">
+		<defaultValueExpression><![CDATA["MotorPH"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="companyAddress" class="java.lang.String">
+		<defaultValueExpression><![CDATA["7 Jupiter Avenue cor. F. Sandoval Jr., Bagong Nayon, Quezon City"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="companyPhone" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Phone: (028) 911-5071 / (028) 911-5072 / (028) 911-5073"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="companyEmail" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Email: corporate@motorph.com"]]></defaultValueExpression>
+	</parameter>
+	<query language="SQL"><![CDATA[]]></query>
+	<field name="employeeNo" class="java.lang.String"/>
+	<field name="employeeFullName" class="java.lang.String"/>
+	<field name="position" class="java.lang.String"/>
+	<field name="department" class="java.lang.String"/>
+	<field name="grossIncome" class="java.lang.Double"/>
+	<field name="sssNo" class="java.lang.String"/>
+	<field name="sssContribution" class="java.lang.Double"/>
+	<field name="philhealthNo" class="java.lang.String"/>
+	<field name="philhealthContribution" class="java.lang.Double"/>
+	<field name="pagIbigNo" class="java.lang.String"/>
+	<field name="pagIbigContribution" class="java.lang.Double"/>
+	<field name="tin" class="java.lang.String"/>
+	<field name="withholdingTax" class="java.lang.Double"/>
+	<field name="netPay" class="java.lang.Double"/>
+	<variable name="totalGrossIncome" calculation="Sum" class="java.lang.Double">
+		<expression><![CDATA[$F{grossIncome}]]></expression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="totalSssContribution" calculation="Sum" class="java.lang.Double">
+		<expression><![CDATA[$F{sssContribution}]]></expression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="totalPhilhealthContribution" calculation="Sum" class="java.lang.Double">
+		<expression><![CDATA[$F{philhealthContribution}]]></expression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="totalPagIbigContribution" calculation="Sum" class="java.lang.Double">
+		<expression><![CDATA[$F{pagIbigContribution}]]></expression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="totalWithholdingTax" calculation="Sum" class="java.lang.Double">
+		<expression><![CDATA[$F{withholdingTax}]]></expression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="totalNetPay" calculation="Sum" class="java.lang.Double">
+		<expression><![CDATA[$F{netPay}]]></expression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<title height="118" splitType="Stretch">
+		<element kind="textField" uuid="6587548d-f2bb-449e-9251-1d6c27f30944" x="96" y="18" width="180" height="24" style="CompanyName">
+			<expression><![CDATA[$P{companyName}]]></expression>
+		</element>
+		<element kind="textField" uuid="294d1e4a-7ace-49f0-993f-024f3ae43dd9" x="96" y="45" width="370" height="9" style="CompanyInfo">
+			<expression><![CDATA[$P{companyAddress}]]></expression>
+		</element>
+		<element kind="textField" uuid="9223e0e2-1c1d-4f41-8efd-60f1f779974b" x="96" y="57" width="370" height="9" style="CompanyInfo">
+			<expression><![CDATA[$P{companyPhone}]]></expression>
+		</element>
+		<element kind="textField" uuid="c7802637-e4dc-47f1-82a0-6ac8baf1c0b5" x="96" y="69" width="370" height="9" style="CompanyInfo">
+			<expression><![CDATA[$P{companyEmail}]]></expression>
+		</element>
+		<element kind="staticText" uuid="d3d0aba1-8e4a-4e4f-9832-225fdf4c12f8" x="0" y="98" width="260" height="12" style="ReportTitle">
+			<text><![CDATA[MONTHLY PAYROLL SUMMARY REPORT]]></text>
+		</element>
+	</title>
+	<columnHeader height="36" splitType="Stretch">
+		<element kind="staticText" uuid="69bc6ff4-a034-4283-9950-6995198f8684" mode="Opaque" x="290" y="0" width="106" height="13" style="Header">
+			<text><![CDATA[SOCIAL SECURITY SYSTEM]]></text>
+		</element>
+		<element kind="staticText" uuid="2e96c11e-e5fb-4a6f-8191-2460bafdc655" mode="Opaque" x="396" y="0" width="108" height="13" style="Header">
+			<text><![CDATA[PHILHEALTH]]></text>
+		</element>
+		<element kind="staticText" uuid="62420f18-693a-46b0-8a61-d588918a274d" mode="Opaque" x="504" y="0" width="108" height="13" style="Header">
+			<text><![CDATA[PAG-IBIG]]></text>
+		</element>
+		<element kind="staticText" uuid="d3df3d13-7b50-4cb0-9cb9-d17a6ea00afd" mode="Opaque" x="612" y="0" width="117" height="13" style="Header">
+			<text><![CDATA[BIR]]></text>
+		</element>
+		<element kind="staticText" uuid="cfae110c-390d-4f7f-b8a5-c011ed493de4" mode="Opaque" x="0" y="13" width="35" height="23" style="Header">
+			<text><![CDATA[Employee No]]></text>
+		</element>
+		<element kind="staticText" uuid="3f6f347f-a740-4213-b767-a46ce6f7df55" mode="Opaque" x="35" y="13" width="75" height="23" style="Header">
+			<text><![CDATA[Employee Full Name]]></text>
+		</element>
+		<element kind="staticText" uuid="78c38c82-8985-4f30-8e21-2ae22cb67df9" mode="Opaque" x="110" y="13" width="70" height="23" style="Header">
+			<text><![CDATA[Position]]></text>
+		</element>
+		<element kind="staticText" uuid="6f673ff3-8395-444f-89e8-d669c2a32c2e" mode="Opaque" x="180" y="13" width="55" height="23" style="Header">
+			<text><![CDATA[Department]]></text>
+		</element>
+		<element kind="staticText" uuid="e4c73fc5-9948-4b73-9d19-6f15839371cc" mode="Opaque" x="235" y="13" width="55" height="23" style="Header">
+			<text><![CDATA[Gross Income]]></text>
+		</element>
+		<element kind="staticText" uuid="e6d66e81-3b94-40ec-aa2d-acd710fe4e33" mode="Opaque" x="290" y="13" width="58" height="23" style="Header">
+			<text><![CDATA[Social Security No.]]></text>
+		</element>
+		<element kind="staticText" uuid="28de0733-c46e-4630-bad7-a0617fcd05fe" mode="Opaque" x="348" y="13" width="48" height="23" style="Header">
+			<text><![CDATA[Social Security Contribution]]></text>
+		</element>
+		<element kind="staticText" uuid="50c94cd2-7425-4a32-9f35-d26e65f681e3" mode="Opaque" x="396" y="13" width="60" height="23" style="Header">
+			<text><![CDATA[Philhealth No.]]></text>
+		</element>
+		<element kind="staticText" uuid="2d0ec762-e5ca-4a51-a20c-49d619af50d8" mode="Opaque" x="456" y="13" width="48" height="23" style="Header">
+			<text><![CDATA[Philhealth Contribution]]></text>
+		</element>
+		<element kind="staticText" uuid="aa7db9cf-604e-45a7-9be1-e61a0d868914" mode="Opaque" x="504" y="13" width="60" height="23" style="Header">
+			<text><![CDATA[Pag-ibig No.]]></text>
+		</element>
+		<element kind="staticText" uuid="24ac16f3-e17b-4306-8d2a-0483d2733a56" mode="Opaque" x="564" y="13" width="48" height="23" style="Header">
+			<text><![CDATA[Pag-ibig Contribution]]></text>
+		</element>
+		<element kind="staticText" uuid="90465d1e-67ce-42be-8805-a1324a406538" mode="Opaque" x="612" y="13" width="62" height="23" style="Header">
+			<text><![CDATA[TIN]]></text>
+		</element>
+		<element kind="staticText" uuid="6ed1674e-0111-4bc5-abdb-ee6c901d514f" mode="Opaque" x="674" y="13" width="55" height="23" style="Header">
+			<text><![CDATA[Withholding Tax]]></text>
+		</element>
+		<element kind="staticText" uuid="88d91397-ab99-41a5-8b44-49b6a9e774e8" mode="Opaque" x="729" y="13" width="55" height="23" style="Header">
+			<text><![CDATA[Net Pay]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<element kind="rectangle" uuid="8eecbc4c-0533-498d-b6b8-323884c8edee" mode="Opaque" x="0" y="0" width="784" height="13" backcolor="#F1F1F1">
+				<printWhenExpression><![CDATA[$V{REPORT_COUNT}.intValue() % 2 == 0]]></printWhenExpression>
+				<pen lineWidth="0.0"/>
+			</element>
+			<element kind="textField" uuid="ea51c997-7499-4b4c-a704-390f922ef87c" x="0" y="1" width="35" height="10" style="CellCenter">
+				<expression><![CDATA[$F{employeeNo}]]></expression>
+			</element>
+			<element kind="textField" uuid="a503dd7b-b418-45aa-b136-d03073f97c87" x="35" y="1" width="75" height="10" style="Cell">
+				<expression><![CDATA[$F{employeeFullName}]]></expression>
+			</element>
+			<element kind="textField" uuid="0be0c976-8b4c-4d7a-8139-8b0fd546b5a1" x="110" y="1" width="70" height="10" style="Cell">
+				<expression><![CDATA[$F{position}]]></expression>
+			</element>
+			<element kind="textField" uuid="1976de9d-4a54-40ff-8b76-2cc372c3ed35" x="180" y="1" width="55" height="10" style="Cell">
+				<expression><![CDATA[$F{department}]]></expression>
+			</element>
+			<element kind="textField" uuid="a741491a-e8c4-4309-b1bc-7c6a9c0335a8" x="235" y="1" width="55" height="10" pattern="PHP #,##0.00" style="Money">
+				<expression><![CDATA[$F{grossIncome}]]></expression>
+			</element>
+			<element kind="textField" uuid="70e94eee-3a5a-4b10-92fc-b25568abeb33" x="290" y="1" width="58" height="10" style="CellCenter">
+				<expression><![CDATA[$F{sssNo}]]></expression>
+			</element>
+			<element kind="textField" uuid="294c3926-f620-4bf8-b994-c8238e831ea0" x="348" y="1" width="48" height="10" pattern="PHP #,##0.00" style="Money">
+				<expression><![CDATA[$F{sssContribution}]]></expression>
+			</element>
+			<element kind="textField" uuid="286f99c2-869f-455f-b9f6-7f99544ef656" x="396" y="1" width="60" height="10" style="CellCenter">
+				<expression><![CDATA[$F{philhealthNo}]]></expression>
+			</element>
+			<element kind="textField" uuid="651b0dac-d3e5-4371-9e58-a156649468f9" x="456" y="1" width="48" height="10" pattern="PHP #,##0.00" style="Money">
+				<expression><![CDATA[$F{philhealthContribution}]]></expression>
+			</element>
+			<element kind="textField" uuid="da1bba80-2825-4810-88c0-a778d841d9f8" x="504" y="1" width="60" height="10" style="CellCenter">
+				<expression><![CDATA[$F{pagIbigNo}]]></expression>
+			</element>
+			<element kind="textField" uuid="d002b8a5-7684-4239-bf69-acaf0553966d" x="564" y="1" width="48" height="10" pattern="PHP #,##0.00" style="Money">
+				<expression><![CDATA[$F{pagIbigContribution}]]></expression>
+			</element>
+			<element kind="textField" uuid="80e7461e-09da-463e-814e-82219efa0224" x="612" y="1" width="62" height="10" style="CellCenter">
+				<expression><![CDATA[$F{tin}]]></expression>
+			</element>
+			<element kind="textField" uuid="ef91fa33-9711-4626-a54d-db16c45b8ab7" x="674" y="1" width="55" height="10" pattern="PHP #,##0.00" style="Money">
+				<expression><![CDATA[$F{withholdingTax}]]></expression>
+			</element>
+			<element kind="textField" uuid="b173bb55-70be-4f32-81be-9f5ae3811fae" x="729" y="1" width="55" height="10" pattern="PHP #,##0.00" style="Money">
+				<expression><![CDATA[$F{netPay}]]></expression>
+			</element>
+		</band>
+	</detail>
+	<summary height="18" splitType="Stretch">
+		<element kind="line" uuid="c6d62c4b-0f98-45cd-81d9-34473eea967e" x="0" y="0" width="784" height="1"/>
+		<element kind="staticText" uuid="d2053bd5-4135-43fb-b332-8f9b3755c201" x="0" y="3" width="235" height="12" style="Total">
+			<text><![CDATA[TOTAL]]></text>
+		</element>
+		<element kind="textField" uuid="72f91a89-dc30-44da-9810-e8d32dcde4a5" x="235" y="3" width="55" height="12" pattern="PHP #,##0.00" style="TotalMoney">
+			<expression><![CDATA[$V{totalGrossIncome}]]></expression>
+		</element>
+		<element kind="textField" uuid="e77cfa5b-aeeb-43a2-9afd-15dd80d2b081" x="348" y="3" width="48" height="12" pattern="PHP #,##0.00" style="TotalMoney">
+			<expression><![CDATA[$V{totalSssContribution}]]></expression>
+		</element>
+		<element kind="textField" uuid="c638f529-55f6-4c58-9423-32ab0e4aa34a" x="456" y="3" width="48" height="12" pattern="PHP #,##0.00" style="TotalMoney">
+			<expression><![CDATA[$V{totalPhilhealthContribution}]]></expression>
+		</element>
+		<element kind="textField" uuid="d020aa58-04c7-4bed-8261-d873cd039f28" x="564" y="3" width="48" height="12" pattern="PHP #,##0.00" style="TotalMoney">
+			<expression><![CDATA[$V{totalPagIbigContribution}]]></expression>
+		</element>
+		<element kind="textField" uuid="7f98f309-4e13-43ff-a536-076c765d9c13" x="674" y="3" width="55" height="12" pattern="PHP #,##0.00" style="TotalMoney">
+			<expression><![CDATA[$V{totalWithholdingTax}]]></expression>
+		</element>
+		<element kind="textField" uuid="bcab3045-119b-4587-826c-96dedee203bd" x="729" y="3" width="55" height="12" pattern="PHP #,##0.00" style="TotalMoney">
+			<expression><![CDATA[$V{totalNetPay}]]></expression>
+		</element>
+	</summary>
+</jasperReport>
