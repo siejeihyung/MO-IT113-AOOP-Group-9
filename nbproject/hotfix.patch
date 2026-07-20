@@ -1,0 +1,233 @@
+diff --git a/src/dao/EmployeeDAO.java b/src/dao/EmployeeDAO.java
+index df8469c..e7be5ce 100644
+--- a/src/dao/EmployeeDAO.java
++++ b/src/dao/EmployeeDAO.java
+@@ -6,6 +6,7 @@ package dao;
+ 
+ import model.Employee;
+ import model.RegularEmployee;
++import model.ProbationaryEmployee;
+ import java.sql.Connection;
+ import java.sql.PreparedStatement;
+ import java.sql.ResultSet;
+@@ -14,6 +15,44 @@ import java.util.ArrayList;
+ import java.util.List;
+ 
+ public class EmployeeDAO {
++
++    // ════════════════════════════════════════════════════════════════════════
++    //  POLYMORPHIC ROW MAPPER
++    //  Single place that decides which Employee subclass to instantiate,
++    //  based on the EmploymentStatus column. Callers only ever see Employee.
++    // ════════════════════════════════════════════════════════════════════════
++    private Employee mapRow(ResultSet rs) throws SQLException {
++        String employeeID  = rs.getString("EmployeeID");
++        String lastName    = rs.getString("LastName");
++        String firstName   = rs.getString("FirstName");
++        String sss         = rs.getString("SSS");
++        String philhealth  = rs.getString("PhilHealth");
++        String tin         = rs.getString("TIN");
++        String pagibig     = rs.getString("PagIbig");
++
++        double basicSalary = rs.getDouble("BasicSalary");
++        double semiMonthly = rs.getDouble("GrossSemiMonthlyRate");
++        double hourlyRate  = rs.getDouble("HourlyRate");
++
++        // Benefits are now read from the DB instead of the old 0.0 placeholder.
++        double totalBenefits = rs.getDouble("RiceSubsidy")
++                             + rs.getDouble("PhoneAllowance")
++                             + rs.getDouble("ClothingAllowance");
++
++        String status = rs.getString("EmploymentStatus");
++        status = (status == null) ? "" : status.trim();
++
++        if ("Probationary".equalsIgnoreCase(status)) {
++            return new ProbationaryEmployee(employeeID, lastName, firstName,
++                    sss, philhealth, tin, pagibig,
++                    basicSalary, semiMonthly, hourlyRate, totalBenefits);
++        }
++
++        // Default: anything not explicitly probationary is treated as regular.
++        return new RegularEmployee(employeeID, lastName, firstName,
++                sss, philhealth, tin, pagibig,
++                basicSalary, semiMonthly, hourlyRate, totalBenefits);
++    }
+     
+     public boolean exists(String username) {
+         return false; 
+@@ -61,19 +100,7 @@ public class EmployeeDAO {
+             pstmt.setString(1, id);
+             ResultSet rs = pstmt.executeQuery();
+             if (rs.next()) {
+-                return new RegularEmployee(
+-                    rs.getString("EmployeeID"),
+-                    rs.getString("LastName"),
+-                    rs.getString("FirstName"),
+-                    rs.getString("SSS"),
+-                    rs.getString("PhilHealth"),
+-                    rs.getString("TIN"),
+-                    rs.getString("PagIbig"),
+-                    rs.getDouble("BasicSalary"),
+-                    rs.getDouble("GrossSemiMonthlyRate"), // Standardized schema mapping
+-                    rs.getDouble("HourlyRate"),
+-                    0.0 // Placeholder for benefits compatibility
+-                );
++                return mapRow(rs);
+             }
+         } catch (SQLException e) {
+             e.printStackTrace();
+@@ -121,19 +148,7 @@ public class EmployeeDAO {
+              ResultSet rs = pstmt.executeQuery()) {
+ 
+             while (rs.next()) {
+-                list.add(new RegularEmployee(
+-                    rs.getString("EmployeeID"),
+-                    rs.getString("LastName"),
+-                    rs.getString("FirstName"),
+-                    rs.getString("SSS"),
+-                    rs.getString("PhilHealth"),
+-                    rs.getString("TIN"),
+-                    rs.getString("PagIbig"),
+-                    rs.getDouble("BasicSalary"),
+-                    rs.getDouble("GrossSemiMonthlyRate"),
+-                    rs.getDouble("HourlyRate"),
+-                    0.0 
+-                ));
++                list.add(mapRow(rs));
+             }
+         } catch (SQLException e) {
+             e.printStackTrace();
+diff --git a/src/gui/EmployeeDashboardPanel.java b/src/gui/EmployeeDashboardPanel.java
+index a6087a0..655a493 100644
+--- a/src/gui/EmployeeDashboardPanel.java
++++ b/src/gui/EmployeeDashboardPanel.java
+@@ -13,6 +13,7 @@ import java.awt.*;
+ import java.net.URL;
+ import java.util.Vector;
+ import model.Deductions;
++import model.PayrollLogic;
+ import gui.PayslipFrame;
+ 
+ /**
+diff --git a/src/model/Employee.java b/src/model/Employee.java
+index be21f8d..c9dfa66 100644
+--- a/src/model/Employee.java
++++ b/src/model/Employee.java
+@@ -51,6 +51,26 @@ public abstract class Employee implements IPayable {
+     public String getLastName() { return lastName; }
+     public String getFirstName() { return firstName; }
+     public String getFullName() { return firstName + " " + lastName; }
++
++    /**
++     * Overloaded version of {@link #getFullName()}.
++     * Demonstrates method overloading (compile-time polymorphism).
++     *
++     * @param lastNameFirst true  -> "Lim, Antonio"  (sorting / report format)
++     *                      false -> "Antonio Lim"   (display format)
++     * @return the employee's full name in the requested format
++     */
++    public String getFullName(boolean lastNameFirst) {
++        String first = (firstName == null) ? "" : firstName.trim();
++        String last  = (lastName  == null) ? "" : lastName.trim();
++
++        if (lastNameFirst) {
++            if (last.isEmpty())  return first;
++            if (first.isEmpty()) return last;
++            return last + ", " + first;
++        }
++        return (first + " " + last).trim();
++    }
+     public String getSSS() { return sss; }
+     public String getPhilHealth() { return philhealth; }
+     public String getTIN() { return tin; }
+diff --git a/src/model/PayrollLogic.java b/src/model/PayrollLogic.java
+index 2ef0bb5..21082a4 100644
+--- a/src/model/PayrollLogic.java
++++ b/src/model/PayrollLogic.java
+@@ -1,6 +1,5 @@
+ package model;
+ 
+-import model.Deductions;
+ 
+ public class PayrollLogic {
+ 
+diff --git a/src/model/ProbationaryEmployee.java b/src/model/ProbationaryEmployee.java
+new file mode 100644
+index 0000000..6a94126
+--- /dev/null
++++ b/src/model/ProbationaryEmployee.java
+@@ -0,0 +1,74 @@
++package model;
++
++/**
++ * MotorPH Probationary Employee Subclass.
++ *
++ * Second concrete subclass of {@link Employee}. Together with
++ * {@link RegularEmployee} it demonstrates runtime polymorphism: the DAO returns
++ * an Employee reference, and calculateGrossPay() / getEmployeeType() resolve to
++ * the correct implementation at runtime.
++ *
++ * BUSINESS RULE (confirm with the team before final submission):
++ * Probationary employees are not yet entitled to the full allowance package.
++ * They receive their basic salary plus a partial share of the benefits,
++ * controlled by BENEFIT_ELIGIBILITY_RATE.
++ */
++public class ProbationaryEmployee extends Employee {
++
++    /** Portion of the standard allowance package a probationary employee receives. */
++    public static final double BENEFIT_ELIGIBILITY_RATE = 0.50;
++
++    /** Standard MotorPH probation length, in months. */
++    public static final int DEFAULT_PROBATION_MONTHS = 6;
++
++    private int probationMonths;
++
++    /**
++     * Standard constructor - same signature as RegularEmployee so the DAO can
++     * map either type from the same ResultSet without special handling.
++     */
++    public ProbationaryEmployee(String employeeID, String lastName, String firstName,
++                                String sss, String philhealth, String tin, String pagibig,
++                                double basicSalary, double semiMonthlyRate,
++                                double hourlyRate, double totalBenefits) {
++        this(employeeID, lastName, firstName, sss, philhealth, tin, pagibig,
++             basicSalary, semiMonthlyRate, hourlyRate, totalBenefits,
++             DEFAULT_PROBATION_MONTHS);
++    }
++
++    /** Extended constructor for a non-standard probation period. */
++    public ProbationaryEmployee(String employeeID, String lastName, String firstName,
++                                String sss, String philhealth, String tin, String pagibig,
++                                double basicSalary, double semiMonthlyRate,
++                                double hourlyRate, double totalBenefits,
++                                int probationMonths) {
++        super(employeeID, lastName, firstName, sss, philhealth, tin, pagibig,
++              basicSalary, semiMonthlyRate, hourlyRate, totalBenefits);
++        setProbationMonths(probationMonths);
++    }
++
++    public int getProbationMonths() {
++        return probationMonths;
++    }
++
++    public final void setProbationMonths(int probationMonths) {
++        this.probationMonths = (probationMonths > 0)
++                ? probationMonths
++                : DEFAULT_PROBATION_MONTHS;
++    }
++
++    /** Allowances actually payable to this employee while under probation. */
++    public double getEligibleBenefits() {
++        return getTotalBenefits() * BENEFIT_ELIGIBILITY_RATE;
++    }
++
++    @Override
++    public double calculateGrossPay() {
++        return getBasicSalary() + getEligibleBenefits();
++    }
++
++    @Override
++    public String getEmployeeType() {
++        return "Probationary";
++    }
++}
