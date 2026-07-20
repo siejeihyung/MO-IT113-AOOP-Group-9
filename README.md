@@ -63,7 +63,7 @@ Our team is dedicated to transitioning our data infrastructure from legacy CSV f
 
 | Member | Role | Primary Responsibilities |
 | :--- | :--- | :--- |
-| **Carl John Pontanilla** | Project Lead | • Spearheads the gradual transition and cleaning of legacy CSV files into a structured SQL database.<br>• Manages the implementation and generation of print-ready `.jrxml` files. |
+| **Carl Justine Pontanilla** | Project Lead | • Spearheads the gradual transition and cleaning of legacy CSV files into a structured SQL database.<br>• Manages the implementation and generation of print-ready `.jrxml` files. |
 | **Sunny Eljohn Lico** | Assistant Lead | • Directs backend optimization, refactoring code from OOP to Advanced OOP (AOOP).<br>• Integrates and fixes GUI components for JasperReports, ensuring seamless SQL-to-report compilation and clean `.jrxml` files. |
 | **Isidro Romano** | Database Architecture Lead | • Architects and manages the overall SQL database schema.<br>• Ensures end-to-end database functionality, data integrity, and cross-platform performance. |
 | **Anton Roger Galfo** | Architecture Design (GUI) Lead | • Designs and polishes the CRUD interfaces for all core modules: *HR, Finance, IT Support, Admin,* and *Employee*.<br>• Coordinates and executes internal system testing. |
