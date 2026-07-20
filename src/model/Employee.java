@@ -51,6 +51,23 @@ public abstract class Employee implements IPayable {
     public String getLastName() { return lastName; }
     public String getFirstName() { return firstName; }
     public String getFullName() { return firstName + " " + lastName; }
+    /**
+     * Overloaded version of getFullName().
+     * Demonstrates method overloading (compile-time polymorphism).
+     * true  -> "Lim, Antonio"  (sorting / report format)
+     * false -> "Antonio Lim"   (display format)
+     */
+    public String getFullName(boolean lastNameFirst) {
+        String first = (firstName == null) ? "" : firstName.trim();
+        String last  = (lastName  == null) ? "" : lastName.trim();
+
+        if (lastNameFirst) {
+            if (last.isEmpty())  return first;
+            if (first.isEmpty()) return last;
+            return last + ", " + first;
+        }
+        return (first + " " + last).trim();
+    }
     public String getSSS() { return sss; }
     public String getPhilHealth() { return philhealth; }
     public String getTIN() { return tin; }

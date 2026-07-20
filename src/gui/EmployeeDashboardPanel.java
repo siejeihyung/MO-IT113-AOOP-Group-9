@@ -12,8 +12,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.net.URL;
 import java.util.Vector;
-import model.Deductions;
 import gui.PayslipFrame;
+import model.PayrollLogic;
 
 /**
  * EmployeeDashboardPanel — Limited dashboard for regular employees.

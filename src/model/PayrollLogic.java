@@ -1,7 +1,5 @@
 package model;
 
-import model.Deductions;
-
 public class PayrollLogic {
 
     // Instance of Deductions class to handle all deduction-related computations

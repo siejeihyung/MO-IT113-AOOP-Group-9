@@ -6,6 +6,7 @@ package dao;
 
 import model.Employee;
 import model.RegularEmployee;
+import model.ProbationaryEmployee;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,38 @@ import java.util.List;
 
 public class EmployeeDAO {
     
+     private Employee mapRow(ResultSet rs) throws SQLException {
+        String employeeID  = rs.getString("EmployeeID");
+        String lastName    = rs.getString("LastName");
+        String firstName   = rs.getString("FirstName");
+        String sss         = rs.getString("SSS");
+        String philhealth  = rs.getString("PhilHealth");
+        String tin         = rs.getString("TIN");
+        String pagibig     = rs.getString("PagIbig");
+
+        double basicSalary = rs.getDouble("BasicSalary");
+        double semiMonthly = rs.getDouble("GrossSemiMonthlyRate");
+        double hourlyRate  = rs.getDouble("HourlyRate");
+
+        // Benefits are now read from the DB instead of the old 0.0 placeholder.
+        double totalBenefits = rs.getDouble("RiceSubsidy")
+                             + rs.getDouble("PhoneAllowance")
+                             + rs.getDouble("ClothingAllowance");
+
+        String status = rs.getString("EmploymentStatus");
+        status = (status == null) ? "" : status.trim();
+
+        if ("Probationary".equalsIgnoreCase(status)) {
+            return new ProbationaryEmployee(employeeID, lastName, firstName,
+                    sss, philhealth, tin, pagibig,
+                    basicSalary, semiMonthly, hourlyRate, totalBenefits);
+        }
+
+        // Default: anything not explicitly probationary is treated as regular.
+        return new RegularEmployee(employeeID, lastName, firstName,
+                sss, philhealth, tin, pagibig,
+                basicSalary, semiMonthly, hourlyRate, totalBenefits);
+    }
     public boolean exists(String username) {
         return false; 
     }
